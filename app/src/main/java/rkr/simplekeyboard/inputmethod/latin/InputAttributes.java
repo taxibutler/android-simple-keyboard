@@ -30,6 +30,7 @@ public final class InputAttributes {
     private final String TAG = InputAttributes.class.getSimpleName();
 
     final public String mTargetApplicationPackageName;
+    final public boolean mShowNumberRow;
     final public boolean mInputTypeNoAutoCorrect;
     final public boolean mIsPasswordField;
     final public boolean mShouldShowSuggestions;
@@ -46,6 +47,7 @@ public final class InputAttributes {
         final int inputType = null != editorInfo ? editorInfo.inputType : 0;
         final int inputClass = inputType & InputType.TYPE_MASK_CLASS;
         mInputType = inputType;
+        mShowNumberRow = InputTypeUtils.isPasswordInputType(inputType);
         mIsPasswordField = InputTypeUtils.isPasswordInputType(inputType)
                 || InputTypeUtils.isVisiblePasswordInputType(inputType);
         if (inputClass != InputType.TYPE_CLASS_TEXT) {
@@ -118,6 +120,7 @@ public final class InputAttributes {
         return String.format(
                 "%s: inputType=0x%08x%s%s%s%s%s targetApp=%s\n", getClass().getSimpleName(),
                 mInputType,
+                (mShowNumberRow ? " showNumberRow" : ""),
                 (mInputTypeNoAutoCorrect ? " noAutoCorrect" : ""),
                 (mIsPasswordField ? " password" : ""),
                 (mShouldShowSuggestions ? " shouldShowSuggestions" : ""),
