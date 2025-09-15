@@ -16,6 +16,8 @@ android {
         }
     }
     namespace 'rkr.simplekeyboard.inputmethod'
+    compileSdk 36
+    buildToolsVersion '36.0.0'
 }
 
 dependencies {
