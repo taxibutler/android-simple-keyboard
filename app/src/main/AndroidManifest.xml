@@ -52,6 +52,15 @@
         </activity>
 
         <receiver
+            android:name=".latin.KeyboardSettingsReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="rkr.simplekeyboard.CHANGE_THEME" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
             android:name=".latin.SystemBroadcastReceiver"
             android:exported="false">
             <intent-filter>
