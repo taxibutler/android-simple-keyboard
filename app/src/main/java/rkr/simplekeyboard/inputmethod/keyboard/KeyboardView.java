@@ -16,6 +16,8 @@
 
 package rkr.simplekeyboard.inputmethod.keyboard;
 
+import static rkr.simplekeyboard.inputmethod.keyboard.KeyboardTheme.KEYBOARD_FUNCTIONAL_KEY_SURFACE_VARIANT;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.TypedArray;
@@ -149,6 +151,15 @@ public class KeyboardView extends View {
         mDefaultKeyLabelFlags = keyAttr.getInt(R.styleable.Keyboard_Key_keyLabelFlags, 0);
         mKeyVisualAttributes = KeyVisualAttributes.newInstance(keyAttr);
         keyAttr.recycle();
+
+        SharedPreferences prefs = PreferenceManagerCompat.getDeviceSharedPreferences(context);
+        int surfaceVariant = prefs.getInt(KEYBOARD_FUNCTIONAL_KEY_SURFACE_VARIANT, 0);
+        mCustomColor = surfaceVariant;
+        if (mFunctionalKeyBackground != null && mCustomColor != 0) {
+//            mFunctionalKeyBackground.mutate().setTint(mCustomColor);
+//            mKeyBackground.mutate().setTint(mCustomColor);
+            mSpacebarBackground.mutate().setTint(mCustomColor);
+        }
 
         mPaint.setAntiAlias(true);
     }

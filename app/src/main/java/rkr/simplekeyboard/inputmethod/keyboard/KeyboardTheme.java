@@ -28,6 +28,7 @@ public final class KeyboardTheme {
     private static final String TAG = KeyboardTheme.class.getSimpleName();
 
     static final String KEYBOARD_THEME_KEY = "pref_keyboard_theme_20140509";
+    static final String KEYBOARD_FUNCTIONAL_KEY_SURFACE_VARIANT = "pref_keyboard_functional_key_surface_variant";
 
     // These should be aligned with Keyboard.themeId and Keyboard.Case.keyboardTheme
     // attributes' values in attrs.xml.
@@ -97,6 +98,10 @@ public final class KeyboardTheme {
         prefs.edit().putString(KEYBOARD_THEME_KEY, Integer.toString(themeId)).apply();
     }
 
+    public static void saveSurfaceVariant(final int surfaceVariant, final SharedPreferences prefs) {
+        prefs.edit().putInt(KEYBOARD_FUNCTIONAL_KEY_SURFACE_VARIANT, surfaceVariant).apply();
+    }
+
     public static KeyboardTheme getKeyboardTheme(final Context context) {
         final SharedPreferences prefs = PreferenceManagerCompat.getDeviceSharedPreferences(context);
         return getKeyboardTheme(prefs);
@@ -118,7 +123,7 @@ public final class KeyboardTheme {
             Log.w(TAG, "Illegal keyboard theme in preference: " + themeIdString, e);
         }
         // Remove preference that contains unknown or illegal theme id.
-        prefs.edit().remove(KEYBOARD_THEME_KEY).remove(Settings.PREF_KEYBOARD_COLOR).apply();
+        prefs.edit().remove(KEYBOARD_THEME_KEY).remove(Settings.PREF_KEYBOARD_COLOR).remove(KEYBOARD_FUNCTIONAL_KEY_SURFACE_VARIANT).apply();
         return getDefaultKeyboardTheme();
     }
 }
