@@ -16,11 +16,15 @@
 
 package rkr.simplekeyboard.inputmethod.latin;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.text.InputType;
 import android.util.Log;
 import android.view.inputmethod.EditorInfo;
 
+import rkr.simplekeyboard.inputmethod.compat.PreferenceManagerCompat;
 import rkr.simplekeyboard.inputmethod.latin.common.StringUtils;
+import rkr.simplekeyboard.inputmethod.latin.settings.Settings;
 import rkr.simplekeyboard.inputmethod.latin.utils.InputTypeUtils;
 
 /**
@@ -42,12 +46,17 @@ public final class InputAttributes {
      */
     final private int mInputType;
 
-    public InputAttributes(final EditorInfo editorInfo, final boolean isFullscreenMode) {
+    public InputAttributes(Context context, final EditorInfo editorInfo, final boolean isFullscreenMode) {
         mTargetApplicationPackageName = null != editorInfo ? editorInfo.packageName : null;
         final int inputType = null != editorInfo ? editorInfo.inputType : 0;
         final int inputClass = inputType & InputType.TYPE_MASK_CLASS;
         mInputType = inputType;
+
+        // show number row
+        final SharedPreferences prefs = PreferenceManagerCompat.getDeviceSharedPreferences(context);
+        prefs.edit().putBoolean(Settings.PREF_SHOW_NUMBER_ROW, InputTypeUtils.isPasswordInputType(inputType)).apply();
         mShowNumberRow = InputTypeUtils.isPasswordInputType(inputType);
+
         mIsPasswordField = InputTypeUtils.isPasswordInputType(inputType)
                 || InputTypeUtils.isVisiblePasswordInputType(inputType);
         if (inputClass != InputType.TYPE_CLASS_TEXT) {
