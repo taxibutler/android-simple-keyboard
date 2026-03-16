@@ -53,9 +53,12 @@ public final class InputAttributes {
         mInputType = inputType;
 
         // show number row
+        final int inputVariation = inputType & InputType.TYPE_MASK_VARIATION;
+        final boolean shouldShowNumberRow = InputTypeUtils.isPasswordInputType(inputType)
+                || InputTypeUtils.isEmailVariation(inputVariation);
         final SharedPreferences prefs = PreferenceManagerCompat.getDeviceSharedPreferences(context);
-        prefs.edit().putBoolean(Settings.PREF_SHOW_NUMBER_ROW, InputTypeUtils.isPasswordInputType(inputType)).apply();
-        mShowNumberRow = InputTypeUtils.isPasswordInputType(inputType);
+        prefs.edit().putBoolean(Settings.PREF_SHOW_NUMBER_ROW, shouldShowNumberRow).apply();
+        mShowNumberRow = shouldShowNumberRow;
 
         mIsPasswordField = InputTypeUtils.isPasswordInputType(inputType)
                 || InputTypeUtils.isVisiblePasswordInputType(inputType);
