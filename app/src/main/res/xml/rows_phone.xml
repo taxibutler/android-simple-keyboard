@@ -33,11 +33,7 @@
         <Key
             latin:keyStyle="num3KeyStyle" />
         <Key
-            latin:keySpec="-"
-            latin:moreKeys="+"
-            latin:keyLabelFlags="hasPopupHint"
-            latin:keyStyle="numKeyStyle"
-            latin:backgroundType="functional"
+            latin:keyStyle="deleteKeyStyle"
             latin:keyWidth="fillRight" />
     </Row>
     <Row>
@@ -48,9 +44,7 @@
         <Key
             latin:keyStyle="num6KeyStyle" />
         <Key
-            latin:keySpec="."
-            latin:keyStyle="numKeyStyle"
-            latin:backgroundType="functional"
+            latin:keyStyle="enterKeyStyle"
             latin:keyWidth="fillRight" />
     </Row>
     <Row>
@@ -60,22 +54,13 @@
             latin:keyStyle="num8KeyStyle" />
         <Key
             latin:keyStyle="num9KeyStyle" />
-        <Key
-            latin:keyStyle="deleteKeyStyle"
-            latin:keyWidth="fillRight" />
+        <Spacer />
     </Row>
     <Row>
-        <Key
-            latin:keyStyle="numPhoneToSymbolKeyStyle" />
+        <Spacer />
         <!-- U+0030: "0" DIGIT ZERO -->
         <Key
-            latin:keyStyle="num0KeyStyle"
-            latin:keySpec="0 +|0"
-            latin:moreKeys="!noPanelAutoMoreKey!,+" />
-        <Key
-            latin:keyStyle="numSpaceKeyStyle" />
-        <Key
-            latin:keyStyle="enterKeyStyle"
-            latin:keyWidth="fillRight" />
+            latin:keyStyle="num0KeyStyle" />
+        <Spacer />
     </Row>
 </merge>
