@@ -12,7 +12,7 @@ import rkr.simplekeyboard.inputmethod.keyboard.KeyboardTheme;
 public class KeyboardSettingsReceiver extends BroadcastReceiver {
     public static final String ACTION_CHANGE_THEME = "rkr.simplekeyboard.CHANGE_THEME";
     public static final String EXTRA_THEME_ID = "theme_id";
-    public static final String SURFACE_VARIANT = "surface_variant";
+    public static final String SURFACE_VARIANT = "primary_color";
 
     @Override
     public void onReceive(Context context, Intent intent) {
