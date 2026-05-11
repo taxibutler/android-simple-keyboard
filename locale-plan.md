@@ -56,11 +56,17 @@ App sends RESET_LOCALE
   → keyboard shows German QWERTZ again
 ```
 
-## Key files to modify
+## Existing issues to fix first
+
+1. **Missing `break` in switch statement** — `KeyboardSettingsReceiver.java` line 30: the `ACTION_CHANGE_THEME` case falls through to `default`. Harmless now since `default` does nothing, but will cause bugs when `CHANGE_LOCALE` and `RESET_LOCALE` cases are added.
+2. **Misleading constant name** — `KeyboardSettingsReceiver.SURFACE_VARIANT` holds the value `"primary_color"`. The constant name should match the actual extra key to avoid confusion when adding more extras.
+3. **Duplicated constants in tb-plus** — `KeyboardConstants.kt` is copy-pasted in both `app-plus` and `app-kiosk`. Should be moved to the shared `domain` module before adding locale-related constants.
+
+## Key files to modify (keyboard app)
 
 | File | Change |
 |---|---|
-| `KeyboardSettingsReceiver.java` | Handle new actions/extras |
+| `KeyboardSettingsReceiver.java` | Handle new actions/extras, fix switch fallthrough |
 | `Settings.java` | New pref keys for `external_locale` / `active_locale` |
 | `RichInputMethodManager.java` | Method to switch subtype programmatically by locale string |
 | `SubtypeLocaleUtils.java` | Helper to find subtype by locale (may already exist) |
@@ -68,6 +74,44 @@ App sends RESET_LOCALE
 | `rows_*.xml` (all variants) | Add locale-switch button to bottom row |
 | `key_styles_common.xml` | Define the new key style |
 | `AndroidManifest.xml` | Register new intent actions |
+
+## Required changes in tb-plus
+
+The `tb-plus` project (`custom-keyboard-features` branch) currently only sends `CHANGE_THEME` broadcasts. The following changes are needed to support the locale features:
+
+### Move keyboard constants to shared module
+
+- Move `KeyboardConstants.kt` from `app-plus` and `app-kiosk` into the `domain` module.
+- Add new constants for broadcast actions and extras:
+  - `ACTION_CHANGE_LOCALE = "rkr.simplekeyboard.CHANGE_LOCALE"`
+  - `ACTION_RESET_LOCALE = "rkr.simplekeyboard.RESET_LOCALE"`
+  - `EXTRA_LOCALE = "locale"`
+  - `KEYBOARD_PACKAGE = "rkr.simplekeyboard.inputmethod"`
+- The existing theme constants (`KEYBOARD_THEME_LIGHT`, `KEYBOARD_THEME_DARK`) and the hardcoded package/action strings in `ThemeViewModel` should also use these shared constants.
+
+### Add locale broadcast methods
+
+Add methods to send locale broadcasts, either in `ThemeViewModel` (renamed to something like `KeyboardViewModel`) or in a new dedicated class. Following the existing `changeKeyboardTheme()` pattern:
+
+- `changeKeyboardLocale(context, locale: String)` — sends `CHANGE_LOCALE` broadcast with `locale` extra.
+- `resetKeyboardLocale(context)` — sends `RESET_LOCALE` broadcast (no extras needed).
+
+These need to be called from both `app-plus` and `app-kiosk`, so the implementation should live in the `domain` module.
+
+### Locale source
+
+The locale value comes from the remote config that tb-plus receives:
+- On app start
+- When the user presses "Reload Config"
+- Periodically on refresh
+
+**TBD:** The specific config field to use for the locale has not been decided yet. Update this section when the field name is known.
+
+### Integration points
+
+- **On config load / reload:** Send `CHANGE_LOCALE` with the locale value from the config.
+- **On session end / booking completion:** Send `RESET_LOCALE` to discard any user locale preference and revert to the config default.
+- The exact trigger points depend on the app's booking/session lifecycle — to be determined during implementation.
 
 ## Open items (waiting on designer)
 
