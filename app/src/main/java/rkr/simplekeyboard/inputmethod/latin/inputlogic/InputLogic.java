@@ -1,5 +1,10 @@
 /*
  * Copyright (C) 2013 The Android Open Source Project
+ * Copyright (C) 2025 Raimondas Rimkus
+ * Copyright (C) 2025 Camille019
+ * Copyright (C) 2023 Md. Rifat Hasan Jihan
+ * Copyright (C) 2021 wittmane
+ * Copyright (C) 2019 Emmanuel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,8 +26,6 @@ import android.text.TextUtils;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
-
-import java.util.TreeSet;
 
 import rkr.simplekeyboard.inputmethod.event.Event;
 import rkr.simplekeyboard.inputmethod.event.InputTransaction;
@@ -196,6 +199,9 @@ public final class InputLogic {
                 break;
             case Constants.CODE_SETTINGS:
                 onSettingsKeyPressed();
+                break;
+            case Constants.CODE_PASTE:
+                mConnection.pasteClipboard();
                 break;
             case Constants.CODE_ACTION_NEXT:
                 performEditorAction(EditorInfo.IME_ACTION_NEXT);

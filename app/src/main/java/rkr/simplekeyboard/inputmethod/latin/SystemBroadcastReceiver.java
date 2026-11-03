@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2014 The Android Open Source Project
+ * Copyright (C) 2017 Raimondas Rimkus
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +23,7 @@ import android.content.Intent;
 import android.util.Log;
 
 import rkr.simplekeyboard.inputmethod.keyboard.KeyboardLayoutSet;
+import rkr.simplekeyboard.inputmethod.latin.utils.LocaleResourceUtils;
 
 /**
  * When the system locale has been changed, {@link Intent#ACTION_LOCALE_CHANGED} is received by
@@ -35,7 +37,8 @@ public final class SystemBroadcastReceiver extends BroadcastReceiver {
         final String intentAction = intent.getAction();
         if (Intent.ACTION_LOCALE_CHANGED.equals(intentAction)) {
             Log.i(TAG, "System locale changed");
-            KeyboardLayoutSet.onSystemLocaleChanged();
+            RichInputMethodManager.getInstance().reloadSubtypes(context);
+            LocaleResourceUtils.onLocalChange(context);
         }
     }
 }

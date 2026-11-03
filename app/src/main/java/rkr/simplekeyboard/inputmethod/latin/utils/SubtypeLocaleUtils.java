@@ -1,5 +1,13 @@
 /*
  * Copyright (C) 2014 The Android Open Source Project
+ * Copyright (C) 2025 Raimondas Rimkus
+ * Copyright (C) 2025 Shunnuo
+ * Copyright (C) 2025 GoodOldAbe
+ * Copyright (C) 2025 Camille019
+ * Copyright (C) 2023 Md. Rifat Hasan Jihan
+ * Copyright (C) 2022 Md Rasel Hossain
+ * Copyright (C) 2021 HanefiAcar
+ * Copyright (C) 2021 wittmane
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -99,6 +107,7 @@ public final class SubtypeLocaleUtils {
     private static final String LOCALE_ROMANIAN = "ro";
     private static final String LOCALE_RUSSIAN = "ru";
     private static final String LOCALE_SLOVAK = "sk";
+    private static final String LOCALE_SAKHA = "sah";
     private static final String LOCALE_SLOVENIAN = "sl";
     private static final String LOCALE_SERBIAN = "sr";
     private static final String LOCALE_SERBIAN_LATIN = "sr_ZZ";
@@ -107,6 +116,7 @@ public final class SubtypeLocaleUtils {
     private static final String LOCALE_TAMIL_INDIA = "ta_IN";
     private static final String LOCALE_TAMIL_SINGAPORE = "ta_SG";
     private static final String LOCALE_TELUGU_INDIA = "te_IN";
+    private static final String LOCALE_TAJIK = "tg";
     private static final String LOCALE_THAI = "th";
     private static final String LOCALE_TAGALOG = "tl";
     private static final String LOCALE_TURKISH = "tr";
@@ -178,6 +188,7 @@ public final class SubtypeLocaleUtils {
             LOCALE_PORTUGUESE_PORTUGAL,
             LOCALE_ROMANIAN,
             LOCALE_RUSSIAN,
+            LOCALE_SAKHA,
             LOCALE_SLOVAK,
             LOCALE_SLOVENIAN,
             LOCALE_SERBIAN,
@@ -187,6 +198,7 @@ public final class SubtypeLocaleUtils {
             LOCALE_TAMIL_INDIA,
             LOCALE_TAMIL_SINGAPORE,
             LOCALE_TELUGU_INDIA,
+            LOCALE_TAJIK,
             LOCALE_THAI,
             LOCALE_TAGALOG,
             LOCALE_TURKISH,
@@ -236,10 +248,12 @@ public final class SubtypeLocaleUtils {
     public static final String LAYOUT_NORDIC = "nordic";
     public static final String LAYOUT_QWERTY = "qwerty";
     public static final String LAYOUT_QWERTZ = "qwertz";
+    public static final String LAYOUT_SAKHA = "sakha";
     public static final String LAYOUT_SERBIAN = "serbian";
     public static final String LAYOUT_SERBIAN_QWERTZ = "serbian_qwertz";
     public static final String LAYOUT_SPANISH = "spanish";
     public static final String LAYOUT_SWISS = "swiss";
+    public static final String LAYOUT_TAJIK = "tajik";
     public static final String LAYOUT_TAMIL = "tamil";
     public static final String LAYOUT_TELUGU = "telugu";
     public static final String LAYOUT_THAI = "thai";
@@ -526,6 +540,9 @@ public final class SubtypeLocaleUtils {
                     addLayout(LAYOUT_NEPALI_ROMANIZED);
                     addLayout(LAYOUT_NEPALI_TRADITIONAL, R.string.subtype_traditional);
                     break;
+                case LOCALE_SAKHA:
+                    addLayout(LAYOUT_SAKHA);
+                    break;
                 case LOCALE_SERBIAN:
                     addLayout(LAYOUT_SERBIAN);
                     break;
@@ -539,6 +556,9 @@ public final class SubtypeLocaleUtils {
                     break;
                 case LOCALE_TELUGU_INDIA:
                     addLayout(LAYOUT_TELUGU);
+                    break;
+                case LOCALE_TAJIK:
+                    addLayout(LAYOUT_TAJIK);
                     break;
                 case LOCALE_THAI:
                     addLayout(LAYOUT_THAI);

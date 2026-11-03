@@ -1,5 +1,8 @@
 /*
  * Copyright (C) 2012 The Android Open Source Project
+ * Copyright (C) 2025 Raimondas Rimkus
+ * Copyright (C) 2024 wittmane
+ * Copyright (C) 2019 Emmanuel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +19,13 @@
 
 package rkr.simplekeyboard.inputmethod.latin;
 
+import static android.content.ClipDescription.MIMETYPE_TEXT_HTML;
+import static android.content.ClipDescription.MIMETYPE_TEXT_PLAIN;
+
 import android.annotation.TargetApi;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.os.Build;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -123,19 +132,22 @@ public final class RichInputConnection {
     /**
      * Reload the cached text from the EditorInfo.
      */
-    public void reloadTextCache(final EditorInfo editorInfo) {
-        if (mExpectedSelStart != INVALID_CURSOR_POSITION && mExpectedSelEnd != INVALID_CURSOR_POSITION) {
+    public void reloadTextCache(final EditorInfo editorInfo, final boolean restarting) {
+        mIC = mLatinIME.getCurrentInputConnection();
+
+        if (mExpectedSelStart != INVALID_CURSOR_POSITION && mExpectedSelEnd != INVALID_CURSOR_POSITION
+            && !restarting) {
             // Updated by onUpdateSelection, don't override as editorInfo might be invalid
+            // If restarting, onStartInputView was called instead of onUpdateSelection
             return;
         }
-
-        mIC = mLatinIME.getCurrentInputConnection();
         updateSelection(editorInfo.initialSelStart, editorInfo.initialSelEnd);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             final SurroundingText textAroundCursor = editorInfo
                     .getInitialSurroundingText(Constants.EDITOR_CONTENTS_CACHE_SIZE, Constants.EDITOR_CONTENTS_CACHE_SIZE, 0);
             setTextAroundCursor(textAroundCursor);
+            mLatinIME.mHandler.postUpdateShiftState();
         } else {
             reloadTextCache();
         }
@@ -321,6 +333,7 @@ public final class RichInputConnection {
         }
         if (mExpectedSelStart >= numChars) {
             mExpectedSelStart -= numChars;
+            mExpectedSelEnd = mExpectedSelStart;
         }
 
         mIC.deleteSurroundingText(numChars, 0);
@@ -345,6 +358,25 @@ public final class RichInputConnection {
         if (isConnected()) {
             mIC.performEditorAction(actionId);
         }
+    }
+
+    public void pasteClipboard() {
+        final ClipboardManager clipboard = (ClipboardManager) mLatinIME.getSystemService(Context.CLIPBOARD_SERVICE);
+        if (clipboard != null && clipboard.hasPrimaryClip()) {
+            final ClipData clipData = clipboard.getPrimaryClip();
+            if (clipData != null && clipData.getItemCount() == 1) {
+                final String mimeType = clipData.getDescription().getMimeType(0);
+                if (MIMETYPE_TEXT_PLAIN.equals(mimeType) || MIMETYPE_TEXT_HTML.equals(mimeType)) {
+                    final CharSequence pasteData = clipData.getItemAt(0).getText();
+                    if (pasteData != null && pasteData.length() > 0) {
+                        mLatinIME.onTextInput(pasteData.toString());
+                        return;
+                    }
+                }
+            }
+        }
+
+        mIC.performContextMenuAction(android.R.id.paste);
     }
 
     public void sendKeyEvent(final KeyEvent keyEvent) {
