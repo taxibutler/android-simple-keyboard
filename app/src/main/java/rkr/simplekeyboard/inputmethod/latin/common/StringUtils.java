@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2012 The Android Open Source Project
+ * Copyright (C) 2025 Raimondas Rimkus
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,21 +52,6 @@ public final class StringUtils {
             }
         }
         return false;
-    }
-
-    /**
-     * Comma-Splittable Text is similar to Comma-Separated Values (CSV) but has much simpler syntax.
-     * Unlike CSV, Comma-Splittable Text has no escaping mechanism, so that the text can't contain
-     * a comma character in it.
-     */
-    private static final String SEPARATOR_FOR_COMMA_SPLITTABLE_TEXT = ",";
-
-    public static boolean containsInCommaSplittableText(final String text,
-            final String extraValues) {
-        if (TextUtils.isEmpty(extraValues)) {
-            return false;
-        }
-        return containsInArray(text, extraValues.split(SEPARATOR_FOR_COMMA_SPLITTABLE_TEXT));
     }
 
     public static int[] toCodePointArray(final CharSequence charSequence) {

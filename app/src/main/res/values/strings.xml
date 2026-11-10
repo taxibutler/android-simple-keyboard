@@ -48,6 +48,8 @@
 
     <!-- Preference for input language selection -->
     <string name="select_language">Languages</string>
+    <string name="select_language_description" translatable="false">en_US:qwerty;en_US:qwertz;de:qwertz</string>
+    <string name="pref_keyboard_color_description" translatable="false">#ECEFF1</string>
 
     <!-- Description for English (UK) keyboard subtype [CHAR LIMIT=25]
          (UK) should be an abbreviation of United Kingdom to fit in the CHAR LIMIT. -->
@@ -64,7 +66,7 @@
          (Latin) can be an abbreviation to fit in the CHAR LIMIT. -->
     <string name="locale_name_sr_ZZ">Serbian (Latin)</string>
     <!-- Description for a keyboard layout listing the language and layout name. -->
-    <string name="subtype_generic_layout"><xliff:g id="LANGUAGE_NAME" example="English (US)">%s</xliff:g> (<xliff:g id="LAYOUT" example="QWERTY">%s</xliff:g>)</string>
+    <string name="subtype_generic_layout"><xliff:g id="LANGUAGE_NAME" example="English (US)">%1$s</xliff:g> (<xliff:g id="LAYOUT" example="QWERTY">%2$s</xliff:g>)</string>
     <!-- Description for a traditional keyboard layout, such as Nepali (Traditional). -->
     <string name="subtype_traditional">Traditional</string>
     <!-- Description for a compact keyboard layout, such as Hindi (Compact). -->
@@ -109,8 +111,8 @@
     <string name="prefs_keyboard_height_settings">Keyboard height</string>
     <string name="prefs_bottom_offset_portrait_settings">Bottom offset</string>
     <string name="keyboard_color">Set custom keyboard color</string>
-    <string name="hide_special_chars">Hide special characters</string>
-    <string name="hide_language_switch_key">Hide language switch key</string>
+    <string name="show_special_chars">Show special characters</string>
+    <string name="show_language_switch_key">Show language switch key</string>
     <string name="pref_use_on_screen">Show on-screen keyboard</string>
     <string name="pref_use_on_screen_summary">Show on-screen keyboard while using physical keyboard</string>
     <string name="pref_enable_ime_switch">Switch to other keyboards</string>

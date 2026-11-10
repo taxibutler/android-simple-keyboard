@@ -1,5 +1,11 @@
 /*
  * Copyright (C) 2008 The Android Open Source Project
+ * Copyright (C) 2025 Raimondas Rimkus
+ * Copyright (C) 2021 wittmane
+ * Copyright (C) 2021 Maarten Trompper
+ * Copyright (C) 2019 Micha LaQua
+ * Copyright (C) 2019 Emmanuel
+ * Modifications Copyright (C) 2026 Butler United
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -308,14 +314,14 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
             loadSettings();
         }
 
-        mKeyboardSwitcher.updateKeyboardTheme(conf.uiMode);
+        mKeyboardSwitcher.onConfigurationChanged();
 
         super.onConfigurationChanged(conf);
     }
 
     @Override
     public View onCreateInputView() {
-        return mKeyboardSwitcher.onCreateInputView(getResources().getConfiguration().uiMode);
+        return mKeyboardSwitcher.onCreateInputView();
     }
 
     @Override
@@ -323,6 +329,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         super.setInputView(view);
         mInputView = view;
         updateSoftInputWindowLayoutParameters();
+        view.requestApplyInsets();
     }
 
     @Override
@@ -377,7 +384,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         // Switch to the null consumer to handle cases leading to early exit below, for which we
         // also wouldn't be consuming gesture data.
         final KeyboardSwitcher switcher = mKeyboardSwitcher;
-        switcher.updateKeyboardTheme(getResources().getConfiguration().uiMode);
+        switcher.updateKeyboardTheme();
         final MainKeyboardView mainKeyboardView = switcher.getMainKeyboardView();
         // If we are starting input in a different text field from before, we'll have to reload
         // settings, so currentSettingsValues can't be final.
@@ -402,7 +409,8 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
                     + ((editorInfo.inputType & InputType.TYPE_TEXT_FLAG_CAP_WORDS) != 0));
         }
         Log.i(TAG, "Starting input. Cursor position = "
-                + editorInfo.initialSelStart + "," + editorInfo.initialSelEnd);
+                + editorInfo.initialSelStart + "," + editorInfo.initialSelEnd +
+                " Restarting = " + restarting);
 
         // In landscape mode, this method gets called without the input view being created.
         if (mainKeyboardView == null) {
@@ -432,7 +440,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
 
             // Some applications call onStartInputView without updating EditorInfo. In these cases
             // selection will be incorrect.
-            mInputLogic.mConnection.reloadTextCache(editorInfo);
+            mInputLogic.mConnection.reloadTextCache(editorInfo, restarting);
         }
 
         if (isDifferentTextField ||
@@ -445,16 +453,10 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
 
             switcher.loadKeyboard(editorInfo, currentSettingsValues, getCurrentAutoCapsState(),
                     getCurrentRecapitalizeState());
-        } else if (restarting) {
+        } else {
             // TODO: Come up with a more comprehensive way to reset the keyboard layout when
             // a keyboard layout set doesn't get reloaded in this method.
             switcher.resetKeyboardStateToAlphabet(getCurrentAutoCapsState(),
-                    getCurrentRecapitalizeState());
-            // In apps like Talk, we come here when the text is sent and the field gets emptied and
-            // we need to re-evaluate the shift state, but not the whole layout which would be
-            // disruptive.
-            // Space state must be updated before calling updateShiftState
-            switcher.requestUpdatingShiftState(getCurrentAutoCapsState(),
                     getCurrentRecapitalizeState());
         }
 
@@ -728,17 +730,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
     @Override
     public void onCodeInput(final int codePoint, final int x, final int y,
             final boolean isKeyRepeat) {
-        // TODO: this processing does not belong inside LatinIME, the caller should be doing this.
-        final MainKeyboardView mainKeyboardView = mKeyboardSwitcher.getMainKeyboardView();
-        // x and y include some padding, but everything down the line (especially native
-        // code) needs the coordinates in the keyboard frame.
-        // TODO: We should reconsider which coordinate system should be used to represent
-        // keyboard event. Also we should pull this up -- LatinIME has no business doing
-        // this transformation, it should be done already before calling onEvent.
-        final int keyX = mainKeyboardView.getKeyX(x);
-        final int keyY = mainKeyboardView.getKeyY(y);
-        final Event event = createSoftwareKeypressEvent(getCodePointForKeyboard(codePoint),
-                keyX, keyY, isKeyRepeat);
+        final Event event = createSoftwareKeypressEvent(getCodePointForKeyboard(codePoint), isKeyRepeat);
         onEvent(event);
     }
 
@@ -754,8 +746,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
     // A helper method to split the code point and the key code. Ultimately, they should not be
     // squashed into the same variable, and this method should be removed.
     // public for testing, as we don't want to copy the same logic into test code
-    public static Event createSoftwareKeypressEvent(final int keyCodeOrCodePoint, final int keyX,
-             final int keyY, final boolean isKeyRepeat) {
+    public static Event createSoftwareKeypressEvent(final int keyCodeOrCodePoint, final boolean isKeyRepeat) {
         final int keyCode;
         final int codePoint;
         if (keyCodeOrCodePoint <= 0) {
@@ -765,7 +756,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
             keyCode = Event.NOT_A_KEY_CODE;
             codePoint = keyCodeOrCodePoint;
         }
-        return Event.createSoftwareKeypressEvent(codePoint, keyCode, keyX, keyY, isKeyRepeat);
+        return Event.createSoftwareKeypressEvent(codePoint, keyCode, isKeyRepeat);
     }
 
     // Called from PointerTracker through the KeyboardActionListener interface

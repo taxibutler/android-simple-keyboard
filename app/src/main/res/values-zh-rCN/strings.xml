@@ -36,7 +36,7 @@
     <string name="locale_name_es_US">"西班牙语（美国）"</string>
     <string name="locale_name_hi_ZZ">"印地英语"</string>
     <string name="locale_name_sr_ZZ">"塞尔维亚语（拉丁语布局）"</string>
-    <string name="subtype_generic_layout">"<xliff:g id="LANGUAGE_NAME">%s</xliff:g>（<xliff:g id="LAYOUT">%s</xliff:g>）"</string>
+    <string name="subtype_generic_layout">"<xliff:g id="LANGUAGE_NAME">%1$s</xliff:g>（<xliff:g id="LAYOUT">%2$s</xliff:g>）"</string>
     <string name="subtype_traditional">"传统"</string>
     <string name="subtype_compact">"紧凑型"</string>
     <string name="add">"添加"</string>
@@ -45,9 +45,9 @@
     <string name="prefs_key_longpress_timeout_settings">"按键长按延迟"</string>
     <string name="button_default">"默认"</string>
     <string name="prefs_keyboard_height_settings">键盘高度</string>
+    <string name="prefs_bottom_offset_portrait_settings">底部偏移</string>
     <string name="keyboard_color">设置自定义键盘颜色</string>
-    <string name="hide_special_chars">隐藏特殊字符</string>
-    <string name="hide_language_switch_key">隐藏语言转换键</string>
+    <string name="pref_use_on_screen_summary">使用物理键盘时显示屏幕键盘</string>
     <string name="pref_enable_ime_switch">切换到其他键盘</string>
     <string name="show_number_row">显示单独的数字行</string>
     <string name="space_swipe">空格滑动光标移动</string>
@@ -60,4 +60,7 @@
     <string name="change_keyboard">更改键盘</string>
     <string name="privacy_policy">隐私政策</string>
     <string name="license">许可证</string>
+    <string name="show_language_switch_key">显示语言切换键</string>
+    <string name="pref_use_on_screen">显示屏幕键盘</string>
+    <string name="show_special_chars">显示特殊字符</string>
 </resources>

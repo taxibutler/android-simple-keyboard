@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2011 The Android Open Source Project
+ * Copyright (C) 2025 Raimondas Rimkus
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +17,6 @@
 
 package rkr.simplekeyboard.inputmethod.latin.utils;
 
-import android.graphics.Insets;
-import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.MarginLayoutParams;
@@ -90,12 +89,6 @@ public final class ViewLayoutUtils {
         } else {
             throw new IllegalArgumentException("Layout parameter doesn't have gravity: "
                     + lp.getClass().getName());
-        }
-    }
-
-    public static void applyViewInsets(final View view, final Insets insets) {
-        if (insets != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            view.setPadding(insets.left, 0, insets.right, insets.bottom);
         }
     }
 }

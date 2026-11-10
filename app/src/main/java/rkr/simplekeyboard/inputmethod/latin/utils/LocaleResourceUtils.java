@@ -1,5 +1,7 @@
 /*
  * Copyright (C) 2011 The Android Open Source Project
+ * Copyright (C) 2025 Raimondas Rimkus
+ * Copyright (C) 2021 wittmane
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,8 +39,7 @@ public final class LocaleResourceUtils {
     private static final Object sInitializeLock = new Object();
     private static Resources sResources;
     // Exceptional locale whose name should be displayed in Locale.ROOT.
-    private static final HashMap<String, Integer> sExceptionalLocaleDisplayedInRootLocale =
-            new HashMap<>();
+    private static final HashMap<String, Integer> sExceptionalLocaleDisplayedInRootLocale = new HashMap<>();
     // Exceptional locale to locale name resource id map.
     private static final HashMap<String, Integer> sExceptionalLocaleToNameIdsMap = new HashMap<>();
     private static final String LOCALE_NAME_RESOURCE_PREFIX =
@@ -58,6 +59,10 @@ public final class LocaleResourceUtils {
                 sInitialized = true;
             }
         }
+    }
+
+    public static void onLocalChange(final Context context) {
+        sResources = context.getResources();
     }
 
     private static void initLocked(final Context context) {
@@ -159,13 +164,11 @@ public final class LocaleResourceUtils {
             exceptionalNameResId = null;
         }
 
-        final String displayName;
         if (exceptionalNameResId != null) {
-            displayName = sResources.getString(exceptionalNameResId);
+            return sResources.getString(exceptionalNameResId);
         } else {
-            displayName = LocaleUtils.constructLocaleFromString(localeString)
+            return LocaleUtils.constructLocaleFromString(localeString)
                     .getDisplayName(displayLocale);
         }
-        return StringUtils.capitalizeEachWord(displayName, displayLocale);
     }
 }
