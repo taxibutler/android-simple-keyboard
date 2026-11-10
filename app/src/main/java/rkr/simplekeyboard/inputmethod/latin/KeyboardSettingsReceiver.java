@@ -26,6 +26,7 @@ public class KeyboardSettingsReceiver extends BroadcastReceiver {
                     KeyboardTheme.saveSurfaceVariant(surfaceVariant, prefs); // this changes the keyboard background color, but we might want to use the color for something else later on
 
                     Log.i("ThemeChangeReceiver", "Keyboard theme changed to ID: " + themeId);
+                    break;
                 }
                 default: {
                     // do nothing
