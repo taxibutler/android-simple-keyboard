@@ -1,0 +1,13 @@
+Butler United Simple Keyboard
+Copyright (C) 2026 Butler United
+
+This product is a modified version of Simple Keyboard
+(https://github.com/rkkr/simple-keyboard), Copyright (C) Raimondas Rimkus
+and contributors, which is based on the Android Open Source Project
+LatinIME keyboard, Copyright (C) The Android Open Source Project.
+
+Butler United modifications include theme and color control from the
+Butler United PLUS and KIOSK apps (KeyboardSettingsReceiver), a number
+row on password and email fields, and a simplified phone dial pad.
+
+Licensed under the Apache License, Version 2.0. See LICENSE.
